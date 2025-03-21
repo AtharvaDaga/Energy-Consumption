@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Consumption Prediction</title>
+    <style>
+        body {
+            background: url("{{ url_for('static', filename='image.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .container {
+            width: 40%;
+            margin: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 26px;
+            color: #fff;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 12px;
+            color: #ddd;
+        }
+
+        input, select {
+            width: 85%;
+            padding: 12px;
+            margin: 8px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.8);
+            color: black;
+            outline: none;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 6px;
+            width: 60%;
+            transition: 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background: #218838;
+        }
+
+        .result {
+            margin-top: 25px;
+            font-size: 22px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Energy Consumption Prediction</h1>
+        <form method="POST" action="/">
+            <label>Building Type:</label>
+            <select name="building_type" required>
+                <option value="Residential">Residential</option>
+                <option value="Commercial">Commercial</option>
+                <option value="Industrial">Industrial</option>
+            </select>
+
+            <label>Square Footage:</label>
+            <input type="number" name="square_footage" required placeholder="Enter square footage">
+
+            <label>Number of Occupants:</label>
+            <input type="number" name="num_occupants" required placeholder="Enter number of occupants">
+
+            <label>Appliances Used:</label>
+            <input type="number" name="appliances" required placeholder="Enter number of appliances">
+
+            <label>Day of the Week:</label>
+            <select name="day_of_week" required>
+                <option value="Weekday">Weekday</option>
+                <option value="Weekend">Weekend</option>
+            </select>
+
+            <label>Heat Level:</label>
+            <select name="heat_level" required>
+                <option value="Mild Day">Mild Day</option>
+                <option value="Moderate Day">Moderate Day</option>
+                <option value="Hot Day">Hot Day</option>
+            </select>
+
+            <button type="submit">Predict</button>
+        </form>
+
+        {% if prediction is not none %}
+            <div class="result">Predicted Energy Consumption: {{ prediction }} kWh</div>
+        {% endif %}
+    </div>
+</body>
+</html>
