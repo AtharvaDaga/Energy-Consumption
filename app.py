@@ -3,17 +3,21 @@ from flask_cors import CORS
 import joblib
 import numpy as np
 import os
-port = int(os.environ.get("PORT", 5000))
 
 app = Flask(__name__)
-CORS(app)  # Allow requests from frontend
+CORS(app)  # Allow cross-origin requests
 
 # Load trained model
-try:
-    model = joblib.load("mlr_energy_consumption_model.pkl")
-    print("Model Loaded Successfully!")
-except Exception as e:
-    print(f"Model Load Error: {e}")
+MODEL_PATH = "mlr_energy_consumption_model.pkl"
+if os.path.exists(MODEL_PATH):
+    try:
+        model = joblib.load(MODEL_PATH)
+        print(" Model Loaded Successfully!")
+    except Exception as e:
+        print(f" Model Load Error: {e}")
+        model = None
+else:
+    print(" Model file not found! Check deployment.")
     model = None
 
 # Mean & Std for normalization
@@ -36,11 +40,20 @@ building_types = {"Residential": [0, 0, 1], "Commercial": [1, 0, 0], "Industrial
 day_of_week = {"Weekday": [1, 0], "Weekend": [0, 1]}
 heat_levels = {"Mild Day": [0, 1, 0], "Moderate Day": [0, 0, 1], "Hot Day": [1, 0, 0]}
 
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({"message": "API is running!"})
+
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
         data = request.get_json()
-        
+
+        if not data:
+            return jsonify({"error": "No JSON data received"}), 400
+
+        print("📩 Received Data:", data)  # Debugging log
+
         # Extract and validate inputs
         square_footage = float(data.get("square_footage", 0))
         num_occupants = float(data.get("num_occupants", 0))
@@ -77,7 +90,9 @@ def predict():
         return jsonify({"prediction": prediction})
 
     except Exception as e:
+        print(f" Prediction Error: {e}")
         return jsonify({"error": str(e)}), 400
 
 if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
