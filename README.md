@@ -1,5 +1,6 @@
 # Energy Consumption
 **Energy Consumption Prediction System**
+
 📌 **Project Overview**
 
 - An end-to-end Machine Learning system that predicts household energy consumption using Multiple Linear Regression. The model is deployed via a Flask REST API and integrated with a Flutter mobile application, enabling users to get real-time energy consumption predictions based on building and environmental inputs.
@@ -29,4 +30,4 @@
 
 📊 **Output**
 - Snapshot Energy prediction
-![image]()
+![image](https://github.com/AtharvaDaga/Energy-Consumption/blob/56dd4f94a64e5facbebde410b740df7dd1e67c27/results/Snapshot%20of%20Output.png)
